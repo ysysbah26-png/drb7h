@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>drb7h | دربحة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-black: #0a0a0a;
+            --card-black: #141414;
+            --gold-main: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-glow: rgba(212, 175, 55, 0.35);
+            --text-white: #ffffff;
+            --text-sub: #b3b3b3;
+            --discord-blurple: #5865F2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 50px;
+        }
+
+        header {
+            width: 100%;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, #181818 0%, var(--bg-black) 100%);
+            border-bottom: 2px solid var(--gold-main);
+            box-shadow: 0 4px 20px var(--gold-glow);
+            position: relative;
+            z-index: 100;
+        }
+
+        .logo-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--gold-main);
+            text-transform: lowercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px var(--gold-glow);
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: var(--gold-main);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .menu-btn:hover {
+            color: var(--gold-light);
+            transform: scale(1.1);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100%;
+            background-color: #111;
+            border-left: 2px solid var(--gold-main);
+            box-shadow: -5px 0 25px rgba(0,0,0,0.8);
+            z-index: 1000;
+            transition: 0.4s ease;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .close-btn {
+            align-self: flex-start;
+            background: none;
+            border: none;
+            color: var(--gold-main);
+            font-size: 1.8rem;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-btn {
+            color: var(--text-white);
+            background: var(--card-black);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 14px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .sidebar-btn i {
+            color: var(--gold-main);
+        }
+
+        .sidebar-btn:hover, .sidebar-btn.active-tab {
+            background: var(--gold-main);
+            color: #000;
+            box-shadow: 0 0 15px var(--gold-glow);
+        }
+
+        .sidebar-btn:hover i, .sidebar-btn.active-tab i {
+            color: #000;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 900;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin-top: 30px;
+        }
+
+        .section-card {
+            background-color: var(--card-black);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.7);
+            position: relative;
+            display: none;
+        }
+
+        .section-card.show {
+            display: block;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-main), transparent);
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--gold-main);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            padding-bottom: 10px;
+        }
+
+        .story-box {
+            color: var(--text-sub);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .media-card {
+            background: #0e0e0e;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transition: 0.3s;
+        }
+
+        .media-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-main);
+            box-shadow: 0 8px 20px var(--gold-glow);
+        }
+
+        .channel-avatar {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold-main);
+            box-shadow: 0 0 10px var(--gold-glow);
+        }
+
+        .media-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .btn-link {
+            background: linear-gradient(135deg, var(--gold-main), #997a15);
+            color: #000;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            width: 100%;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .btn-link:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 4px 12px var(--gold-glow);
+        }
+
+        .awards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .award-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #0e0e0e;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-right: 4px solid var(--gold-main);
+        }
+
+        .award-icon {
+            font-size: 1.8rem;
+            color: var(--gold-main);
+        }
+
+        .award-details h4 {
+            font-size: 1.1rem;
+            color: var(--text-white);
+        }
+
+        .award-details p {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+        }
+
+        .respect-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            text-align: center;
+            line-height: 1.9;
+            font-size: 1.15rem;
+            color: var(--text-white);
+        }
+
+        .respect-shortcut {
+            display: inline-block;
+            margin-top: 15px;
+            background: var(--gold-main);
+            color: #000;
+            font-weight: 800;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 0 12px var(--gold-glow);
+        }
+
+        .designer-box {
+            text-align: center;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--gold-main);
+            border-radius: 12px;
+            box-shadow: inset 0 0 15px var(--gold-glow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .designer-box i.main-icon {
+            font-size: 3rem;
+            color: var(--gold-main);
+            text-shadow: 0 0 10px var(--gold-glow);
+        }
+
+        .designer-box p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--gold-light);
+            font-weight: 700;
+        }
+
+        .designer-name {
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: block;
+            margin-top: 5px;
+            text-shadow: 0 0 8px var(--gold-main);
+        }
+
+        .message-form {
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message-input {
+            width: 100%;
+            background: #0a0a0a;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-white);
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 90px;
+            outline: none;
+        }
+
+        .message-input:focus {
+            border-color: var(--gold-main);
+            box-shadow: 0 0 10px var(--gold-glow);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, var(--discord-blurple), #3b429f);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .send-btn:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 12px rgba(88, 101, 242, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-title">drb7h</div>
+        <button class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+    </header>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" onclick="toggleMenu()"><i class="fa-solid fa-xmark"></i></button>
+        <button class="sidebar-btn active-tab" onclick="showSection('story', this)"><i class="fa-solid fa-book-open"></i> قصة دربحة</button>
+        <button class="sidebar-btn" onclick="showSection('channels', this)"><i class="fa-solid fa-tv"></i> قنوات دربحة</button>
+        <button class="sidebar-btn" onclick="showSection('awards', this)"><i class="fa-solid fa-trophy"></i> الجوائز</button>
+        <button class="sidebar-btn" onclick="showSection('friends', this)"><i class="fa-solid fa-users"></i> أصدقاء دربحة</button>
+        <button class="sidebar-btn" onclick="showSection('respect', this)"><i class="fa-solid fa-server"></i> سيرفر ريسبكت</button>
+        <button class="sidebar-btn" onclick="showSection('credits', this)"><i class="fa-solid fa-laptop-code"></i> حقوق المصمم</button>
+    </div>
+
+    <div class="container">
+
+        <div class="section-card show" id="story">
+            <h2 class="section-title"><i class="fa-solid fa-book-open"></i> قصة دربحة</h2>
+            <div class="story-box">
+                قريباً... سيتم إضافة قصة دربحة هنا.
+            </div>
+        </div>
+
+        <div class="section-card" id="channels">
+            <h2 class="section-title"><i class="fa-solid fa-tv"></i> قنوات دربحة</h2>
+            <div class="grid-cards">
+                <div class="media-card">
+                    <img src="https://unavatar.io/youtube/drb7h" alt="دربحة" class="channel-avatar">
+                    <div class="media-title">القناة الأولى (يوتيوب)</div>
+                    <a href="https://youtube.com/@drb7h?si=nWjAIxXncABulLE-" target="_blank" class="btn-link">الرابط هنا</a>
+                </div>
+
+                <div class="media-card">
+                    <img src="https://unavatar.io/youtube/bani_drb7h" alt="بني دربحة" class="channel-avatar">
+                    <div class="media-title">القناة الثانية (بني دربحة)</div>
+                    <a href="https://youtube.com/@bani_drb7h" target="_blank" class="btn-link">الرابط هنا</a>
+                </div>
+
+                <div class="media-card">
+                    <img src="https://unavatar.io/x/Drb7h1" alt="تويتر" class="channel-avatar">
+                    <div class="media-title">حساب X (تويتر)</div>
+                    <a href="https://x.com/Drb7h1" target="_blank" class="btn-link">الرابط هنا</a>
+                </div>
+
+                <div class="media-card">
+                    <img src="https://unavatar.io/snapchat/Drb7h" alt="سناب شات" class="channel-avatar">
+                    <div class="media-title">حساب سناب شات</div>
+                    <a href="https://snapchat.com/add/Drb7h" target="_blank" class="btn-link">الرابط هنا</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card" id="awards">
+            <h2 class="section-title"><i class="fa-solid fa-trophy"></i> الجوائز والإنجازات</h2>
+            <div class="awards-list">
+                <div class="award-item">
+                    <i class="fa-solid fa-award award-icon"></i>
+                    <div class="award-details">
+                        <h4>درع يوتيوب الفضي</h4>
+                        <p>عند الوصول لـ 100 ألف مشترك</p>
+                    </div>
+                </div>
+
+                <div class="award-item">
+                    <i class="fa-solid fa-crown award-icon"></i>
+                    <div class="award-details">
+                        <h4>درع يوتيوب الذهبي</h4>
+                        <p>عند الوصول لـ مليون مشترك</p>
+                    </div>
+                </div>
+
+                <div class="award-item">
+                    <i class="fa-solid fa-gamepad award-icon"></i>
+                    <div class="award-details">
+                        <h4>جوائز صناع المحتوى والستريمرز</h4>
+                        <p>أفضل ستريمر (2024 - 2025)</p>
+                    </div>
+                </div>
+
+                <div class="award-item">
+                    <i class="fa-solid fa-star award-icon"></i>
+                    <div class="award-details">
+                        <h4>ملك / أسطورة قراند الحياة الواقعية</h4>
+                        <p>لقب ومسيرة حافلة في سيرفرات GTA V Roleplay</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card" id="friends">
+            <h2 class="section-title"><i class="fa-solid fa-users"></i> أصدقاء دربحة</h2>
+            <div class="grid-cards">
+                <div class="media-card">
+                    <img src="https://unavatar.io/youtube/hoook7" alt="هوك" class="channel-avatar">
+                    <div class="media-title">هوك / مروان</div>
+                    <a href="https://youtube.com/@hoook7?si=h43aSlXbuKSuJRGj" target="_blank" class="btn-link">الرابط هنا</a>
+                </div>
+
+                <div class="media-card">
+                    <img src="https://unavatar.io/youtube/abo8aly" alt="ابو غالي" class="channel-avatar">
+                    <div class="media-title">ابو غالي</div>
+                    <a href="https://youtube.com/@abo8aly?si=AwCHNwTzbCHNezqmt" target="_blank" class="btn-link">الرابط هنا</a>
+                </div>
+
+                <div class="media-card">
+                    <img src="https://unavatar.io/youtube/seagull1x" alt="سقيل" class="channel-avatar">
+                    <div class="media-title">سقيل</div>
+                    <a href="https://youtube.com/@seagull1x?si=i0vy437ngOGlxeQO" target="_blank" class="btn-link">الرابط هنا</a>
+                </div>
+
+                <div class="media-card">
+                    <img src="https://unavatar.io/youtube/id7o212" alt="ابو داحم" class="channel-avatar">
+                    <div class="media-title">ابو داحم</div>
+                    <a href="https://youtube.com/@id7o212?si=9pMSloSYsqaqqM0H" target="_blank" class="btn-link">الرابط هنا</a>
+                </div>
+
+                <div class="media-card">
+                    <img src="https://unavatar.io/youtube/s5b1" alt="صخب" class="channel-avatar">
+                    <div class="media-title">صخب</div>
+                    <a href="https://youtube.com/@s5b1?si=dWzxAO9k0q0_t3Ep" target="_blank" class="btn-link">الرابط هنا</a>
+                </div>
+
+                <div class="media-card">
+                    <img src="https://unavatar.io/youtube/fhlwy" alt="فهلوي" class="channel-avatar">
+                    <div class="media-title">فهلوي</div>
+                    <a href="https://youtube.com/@fhlwy?si=laOmOm7wZUSOgSYR" target="_blank" class="btn-link">الرابط هنا</a>
+                </div>
+
+                <div class="media-card">
+                    <img src="https://unavatar.io/youtube/nefoxd" alt="نيفو" class="channel-avatar">
+                    <div class="media-title">نيفو</div>
+                    <a href="https://youtube.com/@nefoxd?si=A-l9T4Lx8wUeYfAV" target="_blank" class="btn-link">الرابط هنا</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card" id="respect">
+            <h2 class="section-title"><i class="fa-solid fa-server"></i> سيرفر ريسبكت</h2>
+            <div class="respect-box">
+                سيرفر ريسبكت هو أفضل سيرفر عربي في الرول بلي، ويعد أضخم المجتمعات التي ساهمت في صنع أفضل الستريمرز واللاعبين.
+                <br>
+                <span class="respect-shortcut">respect.sa</span>
+            </div>
+        </div>
+
+        <div class="section-card" id="credits">
+            <h2 class="section-title"><i class="fa-solid fa-laptop-code"></i> حقوق المصمم</h2>
+            <div class="designer-box">
+                <i class="fa-solid fa-wand-magic-sparkles main-icon"></i>
+                <p>
+                    صمم هذا الموقع لدربحة الستريمر العظيم ومحطم الأرقام والي محد زيو من قبل
+                    <span class="designer-name">المصمم عيسى</span>
+                </p>
+
+                <div class="message-form">
+                    <textarea id="userMsg" class="message-input" placeholder="اكتب رسالتك أو ملاحظتك هنا لترسل إلى الديسكورد..."></textarea>
+                    <button class="send-btn" onclick="sendToDiscord()"><i class="fa-brands fa-discord"></i> إرسال الرسالة للديسكورد</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1534515770090848317/gxlsuhG36eN4GaWwPJTqf2eHELvJ9geJ0QcwA2v000haDWLtJA4rBwjfFcoLt9A-xdgc";
+
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function showSection(sectionId, btn) {
+            const sections = document.querySelectorAll('.section-card');
+            sections.forEach(sec => sec.classList.remove('show'));
+
+            document.getElementById(sectionId).classList.add('show');
+
+            const buttons = document.querySelectorAll('.sidebar-btn');
+            buttons.forEach(b => b.classList.remove('active-tab'));
+            btn.classList.add('active-tab');
+
+            toggleMenu();
+        }
+
+        async function sendToDiscord() {
+            const msgInput = document.getElementById('userMsg');
+            const text = msgInput.value.trim();
+
+            if (text === "") {
+                alert("يرجى كتابة الرسالة أولاً!");
+                return;
+            }
+
+            try {
+                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: "رسائل زوار الموقع",
+                        embeds: [{
+                            title: "📩 رسالة جديدة من زائر الموقع",
+                            description: text,
+                            color: 5793266,
+                            footer: { text: "الوقت: " + new Date().toLocaleString('ar-EG') }
+                        }]
+                    })
+                });
+
+                if (response.ok || response.status === 204) {
+                    alert("تم إرسال رسالتك إلى الديسكورد بنجاح!");
+                    msgInput.value = "";
+                } else {
+                    alert("حدث خطأ أثناء الإرسال، تحقّق من رابط الويب هوك.");
+                }
+            } catch (e) {
+                alert("تعذر الاتصال بالديسكورد، يرجى التأكد من الإنترنت أو رابط الويب هوك.");
+            }
+        }
+    </script>
+</body>
+</html>
