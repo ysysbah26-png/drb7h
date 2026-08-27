@@ -617,4 +617,218 @@
         }
     </script>
 </body>
+</h<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البثوث المباشرة الان</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0e0f;
+            color: #ffffff;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #53fc18;
+            font-size: 2rem;
+        }
+
+        .streamers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .stream-card {
+            background-color: #191c1e;
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #282c30;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .stream-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(83, 252, 24, 0.2);
+            border-color: #53fc18;
+        }
+
+        .thumbnail-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            background-color: #000;
+        }
+
+        .thumbnail-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .live-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff0000;
+            color: white;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            text-transform: uppercase;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .info-container {
+            padding: 15px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #53fc18;
+        }
+
+        .details {
+            overflow: hidden;
+        }
+
+        .username {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .title {
+            font-size: 0.85rem;
+            color: #a0a0a0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .no-streams {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 50px;
+            color: #888;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🟢 القنوات المباشرة الآن على Kick</h1>
+        <div id="streamers-container" class="streamers-grid"></div>
+    </div>
+
+    <script>
+        // قائمة القنوات المضافة
+        const channels = [
+            'imonkey_d',
+            'taf86',
+            'f1aisal',
+            'drb7h',
+            's5b',
+            'nefoxd',
+            'okb8',
+            'aymnalsatam'
+        ];
+
+        const container = document.getElementById('streamers-container');
+
+        async function fetchLiveStreams() {
+            container.innerHTML = '';
+            let activeStreamsCount = 0;
+
+            for (const channel of channels) {
+                try {
+                    const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(`https://kick.com/api/v1/channels/${channel}`)}`);
+                    
+                    if (!response.ok) continue;
+
+                    const data = await response.json();
+
+                    if (data.livestream && data.livestream.is_live) {
+                        activeStreamsCount++;
+
+                        const streamUrl = `https://kick.com/${data.slug}`;
+                        const title = data.livestream.session_title;
+                        const thumbnail = data.livestream.thumbnail.url;
+                        const avatar = data.user.profile_pic || 'https://via.placeholder.com/150';
+                        const username = data.user.username;
+
+                        const cardHTML = `
+                            <a href="${streamUrl}" target="_blank" class="stream-card">
+                                <div class="thumbnail-container">
+                                    <img src="${thumbnail}" alt="${username}">
+                                    <span class="live-badge">مباشر</span>
+                                </div>
+                                <div class="info-container">
+                                    <img src="${avatar}" class="avatar" alt="${username}">
+                                    <div class="details">
+                                        <div class="username">${username}</div>
+                                        <div class="title">${title}</div>
+                                    </div>
+                                </div>
+                            </a>
+                        `;
+
+                        container.insertAdjacentHTML('beforeend', cardHTML);
+                    }
+                } catch (error) {
+                    console.error(`خطأ في جلب بيانات القناة ${channel}:`, error);
+                }
+            }
+
+            if (activeStreamsCount === 0) {
+                container.innerHTML = '<div class="no-streams">لا يوجد أي بث مباشر حالياً لعائلة ريسبكت.</div>';
+            }
+        }
+
+        fetchLiveStreams();
+        setInterval(fetchLiveStreams, 60000);
+    </script>
+</body>
 </html>
+tml>
